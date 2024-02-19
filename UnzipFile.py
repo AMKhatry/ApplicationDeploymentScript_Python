@@ -1,15 +1,28 @@
 import os
 import shutil
 import zipfile
+import time
 
 def get_ignored_files(path, filenames):
-    ret = []
+    ignored = []
     for filename in filenames:
         full_path = os.path.join(path, filename)
         if full_path.lower() in ignored_files_paths:
-            ret.append(filename)
+            ignored.append(filename)
             print(f"Ignored: {full_path}") # Use f-string for string formatting
-    return ret
+    return ignored
+
+def restore_zip_contents_timestamps(zip_file_path, extraction_dir):
+    with zipfile.ZipFile(zip_file_path, 'r') as zip_file:
+        for file_info in zip_file.infolist():
+
+            extracted_file_path = os.path.join(extraction_dir, file_info.filename)
+            
+            # Adjust the date-time to avoid setting it to the current date-time
+            adjusted_datetime = time.mktime(file_info.date_time + (0, 0, -1))
+            
+            # Update the modified time of the extracted file
+            os.utime(extracted_file_path, (adjusted_datetime, adjusted_datetime))
 
 try:
     deployed_app_location = input("Enter the deployed application path: ").strip()
@@ -17,7 +30,7 @@ try:
     if not os.path.isdir(deployed_app_location):
         raise ValueError("Invalid directory path.")
 
-    temporary_extraction_path = os.path.join(deployed_app_location, f"TempExtraction")
+    temporary_extraction_path = os.path.join(deployed_app_location, "TempExtraction")
     zip_file = os.path.join(deployed_app_location, 'build.zip')
 
     destination_path = os.path.join(os.path.dirname(deployed_app_location), "Temporary Destination")
@@ -40,6 +53,7 @@ try:
     # Extracting the zip file
     shutil.unpack_archive(zip_file, temporary_extraction_path)
     print("Extraction successful!")
+    restore_zip_contents_timestamps(zip_file,temporary_extraction_path)
 
     # Selecting the extracted sub-folder
     extracted_sub_folder = os.path.join(temporary_extraction_path, os.listdir(temporary_extraction_path)[0])
