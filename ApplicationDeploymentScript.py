@@ -16,7 +16,7 @@ EXCLUDED_FILES = [
     'web.config',
     os.path.join('Oil', 'Images'),
     os.path.join('Reports', 'Images'),
-    os.path.join('Reports', 'Crystal Reports'),
+    os.path.join('Reports', 'CrystalReports'),
     os.path.join('Tyre', 'Images')
 ]
 
