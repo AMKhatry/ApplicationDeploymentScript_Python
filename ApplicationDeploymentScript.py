@@ -67,7 +67,7 @@ try:
     shutil.unpack_archive(zip_file, temporary_extraction_path)
     print("Extraction successful!")
     restore_zip_contents_timestamps(zip_file,temporary_extraction_path)
-
+    
     extracted_sub_folder = os.path.join(temporary_extraction_path, os.listdir(temporary_extraction_path)[0])
     ignored_files_paths = [os.path.join(extracted_sub_folder.lower(), file.lower()) for file in EXCLUDED_FILES]
     
