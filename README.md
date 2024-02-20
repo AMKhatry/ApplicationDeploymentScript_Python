@@ -13,7 +13,7 @@ This Python script automates the backup and migration process for deployed appli
 
 1. Clone this repository to your local machine.
 2. Ensure you have Python installed.
-3. Run the script (`ApplicationDeploymentScript.py`).
+3. Run the script (`AppDeployScript.py`).
 4. Follow the prompts to enter the path of the deployed application.
 5. The script will automate the backup and migration tasks.
 
